@@ -70,6 +70,7 @@ return new class extends Migration
                 $table->id('order_id');
                 $table->dateTime('start_date');
                 $table->dateTime('end_date');
+                $table->text('note');
                 $table->bigInteger('package_id');
                 $table->bigInteger('client_id');
                 $table->bigInteger('staff_id')->nullable();
@@ -108,6 +109,7 @@ return new class extends Migration
         Schema::connection('mysql_order')->create($orderTable['table_name'],  $orderTable['column']);
         
         //event service db
+        Schema::connection('mysql_event')->create($staffTable['table_name'],  $staffTable['column']);
         Schema::connection('mysql_event')->create($orderTable['table_name'],  $orderTable['column']);
         Schema::connection('mysql_event')->create($eventTable['table_name'],  $eventTable['column']);
     }
