@@ -1,0 +1,19 @@
+services:
+  client_sql:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./client_sql/:/docker-entrypoint-initdb.d
+    networks:
+      - ClientNet
+
+networks:
+  ClientNet:
+    external:
+      name: networks_ClientNet
+  EoNet:
+    external:
+      name: networks_EoNet

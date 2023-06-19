@@ -1,0 +1,1 @@
+docker run --name client_sql -v /mnt/d/petra/.semester\ 6/service\ oriented\ architechture/uas/docker/client_service/client_sql/:/docker-entrypoint-initdb.d  -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 --network ClientNet -d mysql
