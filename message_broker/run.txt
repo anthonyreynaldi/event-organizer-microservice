@@ -1,0 +1,1 @@
+docker run --name eo_mq -h rbthost -p 8080:15672 -p 5672:5672 -d -e RABBITMQ_DEFAULT_USER=radmin -e RABBITMQ_DEFAULT_PASS=rpass --network=EoNet rabbitmq:3-management
