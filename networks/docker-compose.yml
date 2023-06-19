@@ -1,0 +1,19 @@
+services:
+  dummy_service:
+    image: busybox
+    command: tail -f /dev/null
+    networks:
+      - EoNet
+      - ClientNet
+      - StaffNet
+      - LoginNet
+      - OrderNet
+      - EventNet
+
+networks:
+  EoNet:
+  ClientNet:
+  StaffNet:
+  LoginNet:
+  OrderNet:
+  EventNet:
