@@ -1,9 +1,9 @@
 # Event Organizer Microservices Project
 
-Members:
-C14200007 - Xuchin Valezka
-C14200078 - Anthony Reynaldi
-C14200094 - Steven Christando
+### Members:
+1. C14200007 - Xuchin Valezka
+2. C14200078 - Anthony Reynaldi
+3. C14200094 - Steven Christando
 
 
 ## List of Services
