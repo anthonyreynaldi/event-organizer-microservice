@@ -13,6 +13,7 @@ mq_host = 'localhost'
 mq_exchange = 'EoEx'
 mq_routing = [
     'order.new',
+    'order.update',
     'staff.new',
     'staff.update',
     'event.new',
