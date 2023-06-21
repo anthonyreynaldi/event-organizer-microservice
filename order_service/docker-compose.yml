@@ -10,6 +10,28 @@ services:
     networks:
       - OrderNet
 
+  order_svc:
+    build: ./order_svc/
+    image: py_order
+    ports:
+      - 5503:5500
+    networks:
+      - EoNet
+      - OrderNet
+    depends_on: 
+      order_sql:
+        condition: service_started
+
+  order_cons:
+    build: ./order_cons/
+    image: py_order_cons
+    networks:
+      - EoNet
+      - OrderNet
+    depends_on: 
+      order_sql:
+        condition: service_started
+        
 networks:
   OrderNet:
     external:

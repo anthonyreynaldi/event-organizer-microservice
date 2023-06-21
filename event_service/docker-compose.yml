@@ -10,6 +10,28 @@ services:
     networks:
       - EventNet
   
+  event_svc:
+    build: ./event_svc/
+    image: py_event
+    ports:
+      - 5504:5500
+    networks:
+      - EoNet
+      - EventNet
+    depends_on: 
+      event_sql:
+        condition: service_started
+
+  event_cons:
+    build: ./event_cons/
+    image: py_event_cons
+    networks:
+      - EoNet
+      - EventNet
+    depends_on: 
+      event_sql:
+        condition: service_started
+
 networks:
   EventNet:
     external:
