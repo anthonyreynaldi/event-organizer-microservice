@@ -4,7 +4,7 @@ from datetime import datetime
 from producer import *
 
 #ganti entitynya aja sama column pas insert
-entity = 'client'
+entity = 'staff'
 
 sql_host = f'{entity}_service-{entity}_sql-1'    #nama container sql
 sql_host = 'localhost'
@@ -76,6 +76,7 @@ def client(id = None):
         sql = f"SELECT * FROM {entity}s"
 
         if(id):
+            
             if(not isExist(id)) :
                 status_code = 404  # No resources found
                 response['status_code'] = status_code
@@ -149,14 +150,14 @@ def putClient(id):
     # HTTP method = PUT
     # ------------------------------------------------------
     if HTTPRequest.method == 'PUT':
-        
+
         if(not isExist(id)) :
             status_code = 404  # No resources found
             response['status_code'] = status_code
             response['message'] = "Data not found"
 
             return returnResponse(response, status_code)
-        
+
         body = json.loads(HTTPRequest.get_data())
 
         try:
@@ -199,7 +200,7 @@ def putClient(id):
             response['status_code'] = status_code
             response['message'] = err.msg
 
-    return returnResponse(response, status_code)
+        return returnResponse(response, status_code)
 
 
 
