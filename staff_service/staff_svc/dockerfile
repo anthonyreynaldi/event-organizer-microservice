@@ -1,7 +1,7 @@
 FROM python:3.10.11-slim-bullseye
 
 WORKDIR /app
-COPY ./client.py .
+COPY ./staff.py .
 COPY ./producer.py .
 
 RUN python -m pip install flask
@@ -10,4 +10,4 @@ RUN python -m pip install mysql-connector-python
 
 EXPOSE 5500/tcp
 
-CMD python -m flask --app client run --host=0.0.0.0 -p 5500
+CMD python -m flask --app staff run --host=0.0.0.0 -p 5500
