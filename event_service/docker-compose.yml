@@ -1,0 +1,19 @@
+services:
+  event_sql:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./event_sql/:/docker-entrypoint-initdb.d
+    networks:
+      - EventNet
+
+networks:
+  EventNet:
+    external:
+      name: networks_EventNet
+  EoNet:
+    external:
+      name: networks_EoNet

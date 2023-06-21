@@ -1,0 +1,19 @@
+services:
+  order_sql:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./order_sql/:/docker-entrypoint-initdb.d
+    networks:
+      - OrderNet
+
+networks:
+  OrderNet:
+    external:
+      name: networks_OrderNet
+  EoNet:
+    external:
+      name: networks_EoNet
