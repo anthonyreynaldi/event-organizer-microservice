@@ -3,12 +3,14 @@ import mysql.connector, json, pika, logging
 from datetime import datetime
 from producer import *
 
-sql_host = 'client_service-client_sql-1'    #nama container sql
+entity = 'staff'
+
+sql_host = f'{entity}_service-{entity}_sql-1'    #nama container sql
 sql_host = 'localhost'
 sql_user = 'root'
 sql_pass = 'root'
 sql_pass = ''
-sql_db = 'soa_staff'
+sql_db = f'soa_{entity}'
 
 db = mysql.connector.connect(host=sql_host, user=sql_user, password=sql_pass, database=sql_db)
 dbc = db.cursor(dictionary=True)
@@ -39,10 +41,61 @@ def db2str(data, column_names):
         string_row = {key: str(value) for key, value in string_row.items()}
         result.append(string_row)
 
+def returnResponse(dictResponse, status_code):
+    # ------------------------------------------------------
+    # Kirimkan JSON yang sudah dibuat ke client
+    # ------------------------------------------------------
+    resp = HTTPResponse()
+    jsondoc = json.dumps(dictResponse)
+    print(dictResponse)
+    print(jsondoc)
+    resp.response = jsondoc
+    resp.headers['Content-Type'] = 'application/json'
+    resp.status = status_code
+    return resp
 
+@app.route('/staff', methods = ['POST'])
+def postStaff():
+    response = {} 
+    if HTTPRequest.method == 'POST':
+        
+        body = json.loads(HTTPRequest.get_data())
 
-@app.route('/client', methods = ['POST', 'GET'])
-def client():
+        try:
+            # simpan client
+            sql = f"INSERT INTO {entity}s ({entity}_id, name, phone_num, username, password, created_at, updated_at) VALUES (NULL, %s, %s, %s, %s, %s, %s)"
+            dbc.execute(sql, [body['name'], body['phone_num'], body['username'], body['password'], datetime.now(), datetime.now()] )
+            db.commit()
+
+            # inserted id
+            id = dbc.lastrowid
+
+            # ambil semua data
+            sql = f"SELECT * FROM {entity}s WHERE {entity}_id = {id}"
+
+            dbc.execute(sql)
+            json_data = db2str(dbc.fetchall(), getColumnName(dbc))[0]
+
+            # Publish event {entiy}.new
+            # Data json yang dikirim adalah semua ada yang baru diinsert
+            message = json.dumps(json_data)
+            publish_message(message, 'staff.new')
+
+            status_code = 201
+            response['status_code'] = status_code
+            response['message'] = "Data berhasil ditambahkan"
+
+        # bila ada kesalahan saat insert data\
+        except mysql.connector.Error as err:
+            status_code = 409
+            response['status_code'] = status_code
+            response['message'] = err.msg
+
+    return returnResponse(response, status_code)
+        
+
+@app.route('/staff', methods = ['GET'])
+def getStaff():
     response = {}   
 
     # ------------------------------------------------------
@@ -68,79 +121,18 @@ def client():
             status_code = 404  # No resources found
             response['status_code'] = status_code
 
-
-    # ------------------------------------------------------
-    # HTTP method = POST
-    # ------------------------------------------------------
-    elif HTTPRequest.method == 'POST':
-        data = json.loads(HTTPRequest.data)
-        kantinName = data['nama']
-        gedung = data['gedung']
-
-        try:
-            # simpan nama kantin, dan gedung ke database
-            sql = "INSERT INTO kantin_resto (nama,gedung) VALUES (%s,%s)"
-            dbc.execute(sql, [kantinName,gedung] )
-            db.commit()
-            # dapatkan ID dari data kantin yang baru dimasukkan
-            kantinID = dbc.lastrowid
-            data_kantin = {'id':kantinID}
-            jsondoc = json.dumps(data_kantin)
-
-            # simpan menu-menu untuk kantin di atas ke database
-            for i in range(len(data['produk'])):
-                menu = data['produk'][i]['menu']
-                price = data['produk'][i]['price']
-
-                sql = "INSERT INTO kantin_menu (idresto,menu,price) VALUES (%s,%s,%s)"
-                dbc.execute(sql, [kantinID,menu,price] )
-                db.commit()
+    return returnResponse(response, status_code)
 
 
-            # Publish event "new kantin" yang berisi data kantin yg baru.
-            # Data json yang dikirim sebagai message ke RabbitMQ adalah json asli yang
-            # diterima oleh route /kantin [POST] di atas dengan tambahan 2 key baru,
-            # yaitu 'event' dan kantinID.
-            data['event']  = 'new_kantin'
-            data['kantin_id'] = kantinID
-            message = json.dumps(data)
-            publish_message(message, 'client.new')
-
-
-            status_code = 201
-
-        # bila ada kesalahan saat insert data\
-        except mysql.connector.Error as err:
-            status_code = 409
-
-
-    # ------------------------------------------------------
-    # Kirimkan JSON yang sudah dibuat ke client
-    # ------------------------------------------------------
-    resp = HTTPResponse()
-    jsondoc = json.dumps(response)
-    resp.response = jsondoc
-    resp.headers['Content-Type'] = 'application/json'
-    resp.status = status_code
-    return resp
-
-
-
-
-
-@app.route('/kantin/<path:id>', methods = ['GET', 'PUT'])
-def kantin2(id):
+@app.route('/staff/<path:id>', methods = ['GET'])
+def getParticularStaff(id):
     jsondoc = ''
 
-
-    # ------------------------------------------------------
-    # HTTP method = GET
-    # ------------------------------------------------------
     if HTTPRequest.method == 'GET':
         response = {}   
         if id.isnumeric():
-            sql = "SELECT * FROM clients"
-            dbc.execute(sql)
+            sql = "SELECT * FROM staffs where staff_id = %s"
+            dbc.execute(sql, [id])
             clients = dbc.fetchone()
             print(clients)
 
@@ -156,102 +148,56 @@ def kantin2(id):
                 status_code = 404  # No resources found
                 response['status_code'] = status_code
 
-            # ambil data kantin
-        #     sql = "SELECT * FROM kantin_resto WHERE id = %s"
-        #     dbc.execute(sql, [id])
-        #     data_kantin = dbc.fetchone()
-        #     # kalau data kantin ada, juga ambil menu dari kantin tsb.
-        #     if data_kantin != None:
-        #         sql = "SELECT * FROM kantin_menu WHERE idresto = %s"
-        #         dbc.execute(sql, [id])
-        #         data_menu = dbc.fetchall()
-        #         data_kantin['produk'] = data_menu
-        #         jsondoc = json.dumps(data_kantin)
+        return returnResponse(response, status_code)
 
-        #         status_code = 200  # The request has succeeded
-        #     else: 
-        #         status_code = 404  # No resources found
-        # else: status_code = 400  # Bad Request
-
-
-    # ------------------------------------------------------
-    # HTTP method = POST
-    # ------------------------------------------------------
-    # elif HTTPRequest.method == 'POST':
-    #     data = json.loads(HTTPRequest.data)
-    #     kantinName = data['nama']
-    #     gedung = data['gedung']
-
-    #     try:
-    #         # simpan nama kantin, dan gedung ke database
-    #         sql = "INSERT INTO kantin_resto (id, nama,gedung) VALUES (%s,%s,%s)"
-    #         dbc.execute(sql, [id,kantinName,gedung] )
-    #         db.commit()
-    #         # dapatkan ID dari data kantin yang baru dimasukkan
-    #         kantinID = dbc.lastrowid
-    #         data_kantin = {'id':kantinID}
-    #         jsondoc = json.dumps(data_kantin)
-
-    #         # TODO: Kirim message ke order_service melalui RabbitMQ tentang adanya data kantin baru
-
-
-    #         status_code = 201
-    #     # bila ada kesalahan saat insert data, buat XML dengan pesan error
-    #     except mysql.connector.Error as err:
-    #         status_code = 409
-
-
-    # ------------------------------------------------------
-    # HTTP method = PUT
-    # ------------------------------------------------------
-    elif HTTPRequest.method == 'PUT':
-        data = json.loads(HTTPRequest.data)
-        id = data['id']
-        nama = data['nama']
-        gedung = data['gedung']
-
-        messagelog = 'PUT id: ' + str(id) + ' | nama: ' + nama + ' | gedung: ' + gedung 
-        logging.warning("Received: %r" % messagelog)
+@app.route('/staff/<path:id>', methods = ['PUT'])
+def updateParticularStaff(id) :
+    response = {}
+    if HTTPRequest.method == 'PUT':
+        body = json.loads(HTTPRequest.get_data())
 
         try:
-            # ubah nama kantin dan gedung di database
-            sql = "UPDATE kantin_resto set nama=%s, gedung=%s where id=%s"
-            dbc.execute(sql, [nama,gedung,id] )
+            # update client
+            param = [datetime.now()]
+            
+            #statement query
+            sql = f"UPDATE {entity}s SET updated_at=%s, "
+
+            #concate column name based on key data
+            for column, value in body.items():
+                sql += column + "=%s, "
+                param.append(str(value))
+
+            #delete last , and concate where tablenamewhithouts_id
+            sql = sql[:-2] + f" WHERE {entity}_id=%s"
+            param.append(id)
+
+            dbc.execute(sql, param)
             db.commit()
+                                        
+            # ambil semua data
+            sql = f"SELECT * FROM {entity}s WHERE {entity}_id = {id}"
 
-            # teruskan json yang berisi perubahan data kantin yang diterima dari Web UI
-            # ke RabbitMQ disertai dengan tambahan route = 'kantin.tenant.changed'
-            data_baru = {}
-            data_baru['event']  = "updated_tenant"
-            data_baru['id']     = id
-            data_baru['nama']   = nama
-            data_baru['gedung'] = gedung
-            jsondoc = json.dumps(data_baru)
-            publish_message(jsondoc,'kantin.tenant.changed')
+            dbc.execute(sql)
+            json_data = db2str(dbc.fetchall(), getColumnName(dbc))[0]
 
-            status_code = 200
-        # bila ada kesalahan saat ubah data, buat XML dengan pesan error
+            # Publish event {entiy}.update
+            # Data json yang dikirim adalah semua ada yang baru diinsert
+            message = json.dumps(json_data)
+            publish_message(message, f'{entity}.update')
+
+            status_code = 201
+            response['status_code'] = status_code
+            response['message'] = "Data berhasil diupdate"
+
+        # bila ada kesalahan saat insert data\
         except mysql.connector.Error as err:
             status_code = 409
+            response['status_code'] = status_code
+            response['message'] = err.msg
 
+    return returnResponse(response, status_code)
 
-    # ------------------------------------------------------
-    # HTTP method = DELETE
-    # ------------------------------------------------------
-    # elif HTTPRequest.method == 'DELETE':
-    #     data = json.loads(HTTPRequest.data)
-
-
-
-
-    # # ------------------------------------------------------
-    # # Kirimkan JSON yang sudah dibuat ke client
-    # # ------------------------------------------------------
-    # resp = HTTPResponse()
-    # if jsondoc !='': resp.response = jsondoc
-    # resp.headers['Content-Type'] = 'application/json'
-    # resp.status = status_code
-    # return resp
 
 
 
