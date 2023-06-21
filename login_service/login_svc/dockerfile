@@ -1,13 +1,12 @@
 FROM python:3.10.11-slim-bullseye
 
 WORKDIR /app
-COPY ./staff.py .
-COPY ./producer.py .
+COPY ./login.py .
 
 RUN python -m pip install flask
 RUN python -m pip install pika
 RUN python -m pip install mysql-connector-python
 
-EXPOSE 5501/tcp
+EXPOSE 5502/tcp
 
-CMD python -m flask --app staff run --host=0.0.0.0 -p 5500
+CMD python -m flask --app login run --host=0.0.0.0 -p 5500

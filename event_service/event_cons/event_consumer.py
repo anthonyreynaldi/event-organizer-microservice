@@ -2,10 +2,10 @@ import pika, sys, os
 import mysql.connector,logging, json
 
 sql_host = 'event_service-event_sql-1'    #nama container sql
-sql_host = 'localhost'
+# sql_host = 'localhost'
 sql_user = 'root'
 sql_pass = 'root'
-sql_pass = ''
+# sql_pass = ''
 sql_db = 'soa_event'
 
 mq_host = 'message_broker-eo_mq-1'

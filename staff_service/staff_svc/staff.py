@@ -7,10 +7,10 @@ from producer import *
 entity = 'staff'
 
 sql_host = f'{entity}_service-{entity}_sql-1'    #nama container sql
-sql_host = 'localhost'
+# sql_host = 'localhost'
 sql_user = 'root'
 sql_pass = 'root'
-sql_pass = ''
+# sql_pass = ''
 sql_db = f'soa_{entity}'
 
 
@@ -201,66 +201,3 @@ def putClient(id):
             response['message'] = err.msg
 
         return returnResponse(response, status_code)
-
-@app.route(f'/{entity}/<path:id>', methods = ['PUT'])
-def putClient(id):
-    response = {}
-    # ------------------------------------------------------
-    # HTTP method = PUT
-    # ------------------------------------------------------
-    if HTTPRequest.method == 'PUT':
-        
-        if(not isExist(id)) :
-            status_code = 404  # No resources found
-            response['status_code'] = status_code
-            response['message'] = "Data not found"
-
-            return returnResponse(response, status_code)
-        
-        body = json.loads(HTTPRequest.get_data())
-
-        try:
-            # update client
-            param = [datetime.now()]
-            
-            #statement query
-            sql = f"UPDATE {entity}s SET updated_at=%s, "
-
-            #concate column name based on key data
-            for column, value in body.items():
-                sql += column + "=%s, "
-                param.append(str(value))
-
-            #delete last , and concate where tablenamewhithouts_id
-            sql = sql[:-2] + f" WHERE {entity}_id=%s"
-            param.append(id)
-
-            dbc.execute(sql, param)
-            db.commit()
-                                        
-            # ambil semua data
-            sql = f"SELECT * FROM {entity}s WHERE {entity}_id = {id}"
-
-            dbc.execute(sql)
-            json_data = db2str(dbc.fetchall())[0]
-
-            # Publish event {entiy}.update
-            # Data json yang dikirim adalah semua ada yang baru diinsert
-            message = json.dumps(json_data)
-            publish_message(message, f'{entity}.update')
-
-            status_code = 201
-            response['status_code'] = status_code
-            response['message'] = "Data berhasil diupdate"
-
-        # bila ada kesalahan saat insert data\
-        except mysql.connector.Error as err:
-            status_code = 409
-            response['status_code'] = status_code
-            response['message'] = err.msg
-
-    return returnResponse(response, status_code)
-
-
-
-

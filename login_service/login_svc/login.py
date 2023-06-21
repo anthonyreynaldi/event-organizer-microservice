@@ -6,10 +6,10 @@ from datetime import datetime
 entity = 'login'
 
 sql_host = f'{entity}_service-{entity}_sql-1'    #nama container sql
-sql_host = 'localhost'
+# sql_host = 'localhost'
 sql_user = 'root'
 sql_pass = 'root'
-sql_pass = ''
+# sql_pass = ''
 sql_db = f'soa_{entity}'
 
 

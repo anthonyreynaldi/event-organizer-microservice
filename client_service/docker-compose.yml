@@ -9,6 +9,17 @@ services:
       - ./client_sql/:/docker-entrypoint-initdb.d
     networks:
       - ClientNet
+  client_svc:
+    build: ./client_svc/
+    image: py_client
+    ports:
+      - 5500:5500
+    networks:
+      - EoNet
+      - ClientNet
+    depends_on: 
+      client_sql:
+        condition: service_started
 
 networks:
   ClientNet:

@@ -1,0 +1,39 @@
+services:
+  login_sql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./login_sql/:/docker-entrypoint-initdb.d
+    networks:
+      - LoginNet
+
+  login_svc:
+    build: ./login_svc/
+    image: py_login
+    ports:
+      - 5502:5500
+    networks:
+      - EoNet
+      - LoginNet
+    depends_on: 
+      login_sql:
+        condition: service_started
+
+  login_cons:
+    build: ./login_cons/
+    image: py_login_cons
+    networks:
+      - EoNet
+      - LoginNet
+    depends_on: 
+      login_sql:
+        condition: service_started
+
+networks:
+  LoginNet:
+    external:
+      name: networks_LoginNet
+  EoNet:
+    external:
+      name: networks_EoNet
