@@ -26,4 +26,8 @@ class clientController extends Controller
     {
         return view('makeOrder');
     }
+    public function profile()
+    {
+        return view('profile');
+    }
 }

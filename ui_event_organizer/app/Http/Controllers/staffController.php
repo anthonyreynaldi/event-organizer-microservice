@@ -22,4 +22,8 @@ class staffController extends Controller
     {
         return view('/staff/details');
     }
+    public function profile()
+    {
+        return view('staff/profile');
+    }
 }
