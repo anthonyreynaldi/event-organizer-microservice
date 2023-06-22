@@ -1,5 +1,6 @@
 import pika, sys, os
 import mysql.connector,logging, json
+import time
 
 sql_host = 'order_service-order_sql-1'    #nama container sql
 # sql_host = 'localhost'
@@ -20,11 +21,33 @@ mq_routing = [
     'package.new'
 ]
 
-db = mysql.connector.connect(host=sql_host, user=sql_user, password=sql_pass, database=sql_db)
-dbc = db.cursor(dictionary=True)
+db = None
+dbc = None
+
+def wait_for_mysql():
+    max_retries = 20
+    retry_delay = 5
+
+    for retry in range(max_retries):
+        try:
+            global db
+            global dbc
+
+            db = mysql.connector.connect(host=sql_host, user=sql_user, password=sql_pass, database=sql_db)
+            dbc = db.cursor(dictionary=True)
+
+            return True
+        except mysql.connector.Error:
+            print('MySQL connection failed. Retrying...')
+            time.sleep(retry_delay)
+
+    print('Failed to establish MySQL connection after retries.')
+    return False
 
 
 def main():
+    wait_for_mysql()
+
     def insert(data, table):
         param = []
         #statement query

@@ -2,6 +2,7 @@ from flask import Flask, render_template, Response as HTTPResponse, request as H
 import mysql.connector, json, pika, logging
 from datetime import datetime
 from producer import *
+import time
 
 #ganti entitynya aja sama column pas insert
 entity = 'order'
@@ -14,8 +15,8 @@ sql_pass = 'root'
 sql_db = f'soa_{entity}'
 
 
-db = mysql.connector.connect(host=sql_host, user=sql_user, password=sql_pass, database=sql_db)
-dbc = db.cursor(dictionary=True)
+db = None
+dbc = None
 
 
 app = Flask(__name__)
@@ -27,6 +28,28 @@ app = Flask(__name__)
 #  403 = Forbidden (user identity is known to the server)
 #  409 = A conflict with the current state of the resource
 #  429 = Too Many Requests
+
+def wait_for_mysql():
+    max_retries = 20
+    retry_delay = 5
+
+    for retry in range(max_retries):
+        try:
+            global db
+            global dbc
+
+            db = mysql.connector.connect(host=sql_host, user=sql_user, password=sql_pass, database=sql_db)
+            dbc = db.cursor(dictionary=True)
+
+            return True
+        except mysql.connector.Error:
+            print('MySQL connection failed. Retrying...')
+            time.sleep(retry_delay)
+
+    print('Failed to establish MySQL connection after retries.')
+    return False
+
+wait_for_mysql()
 
 def reconnect():
     global db
