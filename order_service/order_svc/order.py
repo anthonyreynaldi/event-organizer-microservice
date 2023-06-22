@@ -28,6 +28,13 @@ app = Flask(__name__)
 #  409 = A conflict with the current state of the resource
 #  429 = Too Many Requests
 
+def reconnect():
+    global db
+    global dbc
+
+    db = mysql.connector.connect(host=sql_host, user=sql_user, password=sql_pass, database=sql_db)
+    dbc = db.cursor(dictionary=True)
+
 def getColumnName(cursor):
     column_names = [column[0] for column in cursor.description]
     return column_names
@@ -57,12 +64,16 @@ def returnResponse(dictResponse, status_code):
     return resp
 
 def isExist(id) :
+    reconnect()
+
     sql = f"SELECT * from {entity}s where {entity}_id = {id}"
     dbc.execute(sql)
     orders = dbc.fetchall()
     return len(orders) != 0
 
 def isExistClient(id) :
+    reconnect()
+
     sql = f"SELECT * from clients where client_id = {id}"
     dbc.execute(sql)
     clients = dbc.fetchall()
@@ -78,6 +89,8 @@ def clientOrder(id = None):
     # HTTP method = GET
     # ------------------------------------------------------
     if HTTPRequest.method == 'GET':
+
+        reconnect()
 
         # ambil data clients
         sql = f"SELECT * FROM {entity}s"
@@ -118,6 +131,8 @@ def getOrder(id = None):
     # HTTP method = GET
     # ------------------------------------------------------
     if HTTPRequest.method == 'GET':
+
+        reconnect()
 
         # ambil data clients
         sql = f"SELECT * FROM {entity}s"

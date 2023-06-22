@@ -2,7 +2,7 @@ import pika, sys
 
 def publish_message(message,route):
     mq_host = 'message_broker-eo_mq-1'
-    mq_host = 'localhost'
+    # mq_host = 'localhost'
     mq_exchange = 'EoEx'
 
     credentials = pika.PlainCredentials('radmin', 'rpass')

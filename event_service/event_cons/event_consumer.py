@@ -9,7 +9,7 @@ sql_pass = 'root'
 sql_db = 'soa_event'
 
 mq_host = 'message_broker-eo_mq-1'
-mq_host = 'localhost'
+# mq_host = 'localhost'
 mq_exchange = 'EoEx'
 mq_routing = [
     'order.new',

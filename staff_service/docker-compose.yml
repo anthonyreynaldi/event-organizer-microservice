@@ -1,8 +1,6 @@
 services:
   staff_sql:
     image: mysql
-    ports:
-      - 3307:3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:

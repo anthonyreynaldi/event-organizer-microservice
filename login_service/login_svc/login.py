@@ -27,6 +27,13 @@ app = Flask(__name__)
 #  409 = A conflict with the current state of the resource
 #  429 = Too Many Requests
 
+def reconnect():
+    global db
+    global dbc
+
+    db = mysql.connector.connect(host=sql_host, user=sql_user, password=sql_pass, database=sql_db)
+    dbc = db.cursor(dictionary=True)
+
 def getColumnName(cursor):
     column_names = [column[0] for column in cursor.description]
     return column_names
@@ -61,6 +68,8 @@ def postClient():
 
     if HTTPRequest.method == 'POST':
         body = json.loads(HTTPRequest.get_data())
+
+        reconnect()
         
         # ambil data clients
         sql = f"SELECT * FROM clients WHERE username=%s AND password=%s"
@@ -88,6 +97,8 @@ def postStaff():
     response = {}
     if HTTPRequest.method == 'POST':
         body = json.loads(HTTPRequest.get_data())
+
+        reconnect()
         
         # ambil data clients
         sql = f"SELECT * FROM staffs WHERE username=%s AND password=%s"
