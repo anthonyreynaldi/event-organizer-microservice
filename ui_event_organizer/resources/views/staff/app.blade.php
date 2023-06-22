@@ -18,9 +18,9 @@
     </button> -->
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-        <a class="nav-item nav-link active" href="http://127.0.0.1:8000/home">Home</a>
-        <a class="nav-item nav-link" href="http://127.0.0.1:8000/makeOrder">Make Order</a>
-        <a class="nav-item nav-link" href="http://127.0.0.1:8000/edit">Edit Profile</a>
+        <a class="nav-item nav-link active" href="http://127.0.0.1:8000/staff">Home</a>
+        <a class="nav-item nav-link" href="http://127.0.0.1:8000/staff/add">Add Staff</a>
+        <a class="nav-item nav-link" href="http://127.0.0.1:8000/staff/edit">Edit Profile</a>
         <a class="nav-item nav-link disabled" href="#">Logout</a>
         </div>
     </div>
