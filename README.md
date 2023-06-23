@@ -14,3 +14,4 @@
 - Order Service
 
 ## Diagram
+<img src="./diagram.png" style="display: inline-block; margin: 0 auto; max-width: 40vw">
