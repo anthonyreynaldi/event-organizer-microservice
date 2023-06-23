@@ -10,7 +10,7 @@
                     <!-- <form method="POST"> -->
                         @csrf
                         <div class="form-group">
-                            <label for="start">start date</label>
+                            <label for="start">Start Date</label>
                             <input name="" id="start" class="form-control" type="date" required>
                         </div>
                         <div class="form-group">
@@ -57,20 +57,21 @@
 <script>
     $(document).ready(function(){
         $("#btnSub").click(function(){
-            start = $("#start").val()
-            end = $("#end").val()
+            start_date = $("#start").val()
+            end_date = $("#end").val()
             paket = $("#paket").val()
             notes = $("#notes").val()
             url = ":5503/order"
             datas = {
-                start_date:start,
-                end_date:end,
+                start_date:start_date,
+                end_date:end_date,
                 note:notes,
                 package_id:paket,
                 client_id:{{session()->get('client_id')}},
+                staff_id: 0,
                 url : url
             }
-            if(start_date != "" && end_date != "" && package_id != "" && notes != "" && client_id != "") {
+            if(start_date != "" && end_date != "" && paket != "" && notes != "") {
                 $.ajax({
                     method : "POST",
                     data : datas,
