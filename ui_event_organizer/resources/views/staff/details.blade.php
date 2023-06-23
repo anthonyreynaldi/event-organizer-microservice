@@ -29,7 +29,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                                Day 1
+                                Details
                             </button>
                             </h2>
                             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
@@ -38,37 +38,16 @@
                                 <table class="table table-bordered mt-3">
                                     <thead>
                                         <tr>
+                                            <td>Tanggal</td>
+                                            <!-- <td>Tanggal Selesai<td> -->
                                             <td>Jam Mulai</td>
                                             <td>Jam Selesai</td>
                                             <td>PIC</td>
                                             <td>Deskripsi</td>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                Day 2
-                            </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                            <div class="accordion-body">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Event</button>
-                                <table class="table table-bordered mt-3">
-                                    <thead>
-                                        <tr>
-                                            <td>Jam Mulai</td>
-                                            <td>Jam Selesai</td>
-                                            <td>PIC</td>
-                                            <td>Deskripsi</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                                    <tbody id="table_body">
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -91,11 +70,11 @@
     <div class="modal-body">
         <div class="mb-3">
             <label for="start" class="form-label">Start Time</label>
-            <input id = "start" class="form-control" type="time" placeholder="Default input" aria-label="default input example" require>
+            <input id = "start" class="form-control" type="datetime-local" placeholder="Default input" aria-label="default input example" require>
         </div>
         <div class="mb-3">
             <label for="end" class="form-label">End Time</label>
-            <input id = "end" class="form-control" type="time" placeholder="Default input" aria-label="default input example" required>
+            <input id = "end" class="form-control" type="datetime-local" placeholder="Default input" aria-label="default input example" required>
         </div>
         <div class="mb-3">
             <label for="pic" class="form-label">Staff PIC</label>

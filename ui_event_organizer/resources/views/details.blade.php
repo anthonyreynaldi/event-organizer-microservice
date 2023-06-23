@@ -8,15 +8,15 @@
                 <div class="card-header">Order Details</div>
                 <div class="card-body">
                     <div class="list-group">
-                        <h3 class="card-title">Pernikahan</h3>
-                        <h5 class="card-text">Start Date : 2023-06-19</h5>
-                        <h5 class="card-text">Start Date : 2023-06-20</h5>
+                        <h3 class="card-title"><span id="package_name">package name</span></h3>
+                        <h5 class="card-text">Start Date : <span id="start_date">start date</span> </h5>
+                        <h5 class="card-text">Start Date : <span id="end_date">end date</span></h5>
                         <br>
-                        <p class="card-text">Client Name : Tipen</p>
-                        <p class="card-text">Client Phone Number : 08123456789</p>
-                        <p class="card-text">Note : Minta yang mewah ya mas</p>
-                        <p class="card-text">Staff PIC : Staff Tipen</p>
-                        <p class="card-text">Staff Phone Number : 08123456789</p>
+                        <p class="card-text">Client Name : <span id="client_name">Client Name</span></p>
+                        <p class="card-text">Client Phone Number : <span id="client_phone_num">client phone num</span></p>
+                        <p class="card-text">Note : <span id="note">Notes</span></p>
+                        <p class="card-text">Staff PIC : <span id="staff_name">Nama stafff</span></p>
+                        <p class="card-text">Staff Phone Number : <span id="staff_phone_num">Staff phone num</span></p>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
-                                Day 1
+                                Details
                             </button>
                             </h2>
                             <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
@@ -37,54 +37,16 @@
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
+                                            <td>Tanggal Mulai</td>
+                                            <td>Tanggal Selesai<td>
                                             <td>Jam Mulai</td>
                                             <td>Jam Selesai</td>
                                             <td>PIC</td>
                                             <td>Deskripsi</td>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>09:30:00</td>
-                                            <td>11:00:00</td>
-                                            <td>Staff Tipen</td>
-                                            <td>Pemberkatan pernikahan oleh Romo Aloysius di Gereja</td>
-                                        </tr>
-                                        <tr>
-                                            <td>11:30:00</td>
-                                            <td>13:00:00</td>
-                                            <td>Staff Susin</td>
-                                            <td>Sesi Foto bersama keluarga besar di gereja</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                                Day 2
-                            </button>
-                            </h2>
-                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                            <div class="accordion-body">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <td>Jam Mulai</td>
-                                            <td>Jam Selesai</td>
-                                            <td>PIC</td>
-                                            <td>Deskripsi</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>17:00:00</td>
-                                            <td>21:00:00</td>
-                                            <td>Staff Susin</td>
-                                            <td>Wedding Party di depan rumah (sewa terop)</td>
-                                        </tr>
+                                    <tbody id="table_body">
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -102,4 +64,44 @@
         width: 600px;
     }
 </style>
+
+<script>
+    $(document).ready(function(){
+        var temp = window.location.pathname.split("/");
+        var order_id = temp[temp.length - 1];
+
+        $.ajax({
+            method : "GET",
+            data : {
+                url : ":5503/order/"+order_id
+            },
+            url : "http://127.0.0.1:8000/api/",
+            success : function(response) {
+                order = response['data'][0]
+
+                data = [
+                    "package_name",
+                    "start_date",
+                    "end_date",
+                    "client_name",
+                    "client_phone_num",
+                    "note",
+                    "staff_name",
+                    "staff_phone_num",
+                ]
+
+                console.log(order);
+                for (i in data) {
+                    console.log(data[i]);
+                    console.log(order[data[i]]);
+                    $("#"+data[i]).text(order[data[i]]);
+                }
+                console.log(response['data']);
+            },
+            error : function(response) {
+                console.log(response)
+            }
+        })
+    });
+</script>
 @endsection

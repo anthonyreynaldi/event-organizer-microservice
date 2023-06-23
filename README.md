@@ -8,11 +8,11 @@ Project UAS Service Oriented Architecture / Arsitektur Berorientasi Layanan
 
 
 ## List Service
-- Client Management Service
-- Staff Management Service
-- Login Service
-- Event Service
-- Order Service
+- Client Management Service - :5500/client
+- Staff Management Service - :5501/staff
+- Login Service - :5502/login
+- Event Service - :5503/event
+- Order Service - :5504/order
 
 ## Diagram
 <img src="./diagram.png" style="display: inline-block; margin: 0 auto; max-width: 40vw">

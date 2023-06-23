@@ -117,7 +117,7 @@ def clientOrder(id = None):
 
         # ambil data clients
         column = "orders.order_id, orders.start_date, orders.end_date, orders.note, packages.package_id, packages.name as package_name, packages.price as package_price, clients.client_id, clients.name as client_name, clients.phone_num as client_phone_num, staffs.staff_id, staffs.name as staff_name, staffs.phone_num as staff_phone_num"
-        sql = f"SELECT {column} FROM {entity}s JOIN packages ON {entity}s.package_id = packages.package_id LEFT JOIN clients ON {entity}s.client_id = clients.client_id LEFT JOIN staffs ON {entity}s.staff_id = staffs.staff_id"
+        sql = f"SELECT {column} FROM {entity}s LEFT JOIN packages ON {entity}s.package_id = packages.package_id LEFT JOIN clients ON {entity}s.client_id = clients.client_id LEFT JOIN staffs ON {entity}s.staff_id = staffs.staff_id"
 
         if(id):
             
@@ -160,7 +160,7 @@ def getOrder(id = None):
 
         # ambil data clients
         column = "orders.order_id, orders.start_date, orders.end_date, orders.note, packages.package_id, packages.name as package_name, packages.price as package_price, clients.client_id, clients.name as client_name, clients.phone_num as client_phone_num, staffs.staff_id, staffs.name as staff_name, staffs.phone_num as staff_phone_num"
-        sql = f"SELECT {column} FROM {entity}s JOIN packages ON {entity}s.package_id = packages.package_id JOIN clients ON {entity}s.client_id = clients.client_id JOIN staffs ON {entity}s.staff_id = staffs.staff_id"
+        sql = f"SELECT {column} FROM {entity}s LEFT JOIN packages ON {entity}s.package_id = packages.package_id LEFT JOIN clients ON {entity}s.client_id = clients.client_id LEFT JOIN staffs ON {entity}s.staff_id = staffs.staff_id"
 
         if(id):
             

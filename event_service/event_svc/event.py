@@ -129,6 +129,8 @@ def getEvent(id = None):
             
             sql += f" WHERE order_id = {id}"
 
+        sql += f" ORDER BY start, end ASC"
+
         dbc.execute(sql)
         clients = dbc.fetchall()
 
