@@ -1,0 +1,8 @@
+Berikut link github untuk projek UAS SOA
+
+Kelompok 8:
+1. C14200007 - Xuchin Valezka
+2. C14200078 - Anthony Reynaldi
+3. C14200094 - Steven Christando
+
+https://github.com/anthonyreynaldi/event-organizer-microservice
