@@ -67,6 +67,8 @@
     <script>
         $(document).ready(function(){
             $("#btnSub").click(function(){
+                // username = 'tipen-stafff'
+                // password = 'budak1'
                 username = $("#username").val()
                 password = $("#password").val()
                 role = $("#role").val()
@@ -75,22 +77,26 @@
                 } else {
                     url = "http://localhost:8001/login/client"
                 }
-                console.log(username + password + role)
                 datas = {
                     username :username,
                     password : password,
+                    url : url
                 }
                 console.log(datas)
-                $.ajax({
-                    method : "POST",
-                    url : "http://127.0.0.1:8000/api/login",
-                    success : function(response) {
-                        console.log(response)
-                    },
-                    error : function(response) {
-                        console.log(response)
-                    }
-                })
+                if(username != "" && password != "") {
+                    $.ajax({
+                        method : "POST",
+                        data : datas,
+                        url : "http://127.0.0.1:8000/api/login",
+                        success : function(response) {
+                            alert(response['message']);
+                            console.log(response)
+                        },
+                        error : function(response) {
+                            console.log(response)
+                        }
+                    })
+                }
             })
         })
     </script>

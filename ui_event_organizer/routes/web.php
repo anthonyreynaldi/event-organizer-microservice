@@ -33,5 +33,5 @@ Route::get('/staff/edit',[staffController::class,'edit']);
 Route::get('/staff/details',[staffController::class,'details']);
 Route::get('/staff/profile',[staffController::class,'profile']);
 //curl api call
-Route::get('/api/login', [api::class, 'login']);
+Route::post('/api/login', [api::class, 'login']);
 Route::get('/api/register', [api::class], 'register');
