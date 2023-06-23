@@ -116,7 +116,8 @@ def clientOrder(id = None):
         reconnect()
 
         # ambil data clients
-        sql = f"SELECT * FROM {entity}s"
+        column = "orders.order_id, orders.start_date, orders.end_date, orders.note, packages.package_id, packages.name as package_name, packages.price as package_price, clients.client_id, clients.name as client_name, clients.phone_num as client_phone_num, staffs.staff_id, staffs.name as staff_name, staffs.phone_num as staff_phone_num"
+        sql = f"SELECT {column} FROM {entity}s JOIN packages ON {entity}s.package_id = packages.package_id JOIN clients ON {entity}s.client_id = clients.client_id JOIN staffs ON {entity}s.staff_id = staffs.staff_id"
 
         if(id):
             
@@ -127,7 +128,7 @@ def clientOrder(id = None):
 
                 return returnResponse(response, status_code)
             
-            sql += f" WHERE client_id = {id}"
+            sql += f" WHERE {entity}s.client_id = {id}"
 
         dbc.execute(sql)
         clients = dbc.fetchall()
@@ -158,7 +159,8 @@ def getOrder(id = None):
         reconnect()
 
         # ambil data clients
-        sql = f"SELECT * FROM {entity}s"
+        column = "orders.order_id, orders.start_date, orders.end_date, orders.note, packages.package_id, packages.name as package_name, packages.price as package_price, clients.client_id, clients.name as client_name, clients.phone_num as client_phone_num, staffs.staff_id, staffs.name as staff_name, staffs.phone_num as staff_phone_num"
+        sql = f"SELECT {column} FROM {entity}s JOIN packages ON {entity}s.package_id = packages.package_id JOIN clients ON {entity}s.client_id = clients.client_id JOIN staffs ON {entity}s.staff_id = staffs.staff_id"
 
         if(id):
             
@@ -169,7 +171,7 @@ def getOrder(id = None):
 
                 return returnResponse(response, status_code)
             
-            sql += f" WHERE {entity}_id = {id}"
+            sql += f" WHERE {entity}s.{entity}_id = {id}"
 
         dbc.execute(sql)
         clients = dbc.fetchall()

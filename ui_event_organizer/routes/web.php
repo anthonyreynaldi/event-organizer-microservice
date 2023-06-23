@@ -23,17 +23,20 @@ Route::get('/', [LoginController::class, 'showLoginForm']);
 Route::get('/register', [RegisterController::class, 'showRegistrationForm']);
 Route::get('/home', [clientController::class, 'home']);
 Route::get('/edit', [clientController::class, 'edit']);
-Route::get('/details', [clientController::class, 'details']);
+Route::get('/details/{order_id}', [clientController::class, 'details']);
 Route::get('/makeOrder', [clientController::class, 'makeOrder']);
 Route::get('/profile', [clientController::class, 'profile']);
 // staff punya
 Route::get('/staff',[staffController::class, 'home']);
 Route::get('/staff/add', [staffController::class,'add']);
 Route::get('/staff/edit',[staffController::class,'edit']);
-Route::get('/staff/details',[staffController::class,'details']);
+Route::get('/staff/details/{order_id}',[staffController::class,'details']);
 Route::get('/staff/profile',[staffController::class,'profile']);
 //curl api call
 // Route::post('/api/login', [api::class, 'login']);
 // Route::get('/api/register', [api::class, 'register']);
 // Route::post('/api/orderList',[api::class,'showOrder']);
+Route::get('/api/session', [api::class, 'getSession']);
+Route::post('/api/session',[api::class,'setSession']);
+Route::get('/api/logout',[api::class,'destroySession']);
 Route::match(['get', 'post', 'put'], '/api', [api::class,'index']);

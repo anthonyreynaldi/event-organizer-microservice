@@ -26,7 +26,7 @@
                             <input type="password" name="password" id="password" class="form-control" required>
                         </div>
                         <div class="row mt-3 justify-content-center">
-                            <button type="submit" class="btn btn-primary btnSub">Add</button>
+                            <button type="submit" class="btn btn-primary btnSub" id="btnSub">Add</button>
                         </div>
                         <div class="row mt-3 justify-content-center">
                             <a href="http://127.0.0.1:8000/staff" class="btn btn-secondary" id="btnLog">Back to homepage</a>
@@ -51,4 +51,38 @@
         max-width: 50%;
     }
 </style>
+<script>
+    $(document).ready(function(){
+        $("#btnSub").click(function(){
+            name = $("#name").val()
+            phone = $("#phoneNum").val()
+            username = $("#username").val()
+            password = $("#password").val()
+            url = ":5501/staff"
+            datas = {
+                name:name,
+                phone_num:phone,
+                username :username,
+                password : password,
+                url : url
+            }
+            if(name != "" && phone != "" && username != "" && password != "") {
+                $.ajax({
+                    method : "POST",
+                    data : datas,
+                    url : "http://127.0.0.1:8000/api/",
+                    success : function(response) {
+                        alert(response['message']);
+                        console.log(response)
+                    },
+                    error : function(response) {
+                        console.log(response)
+                    }
+                })
+            } else {
+                console.log("isi kabeh")
+            }
+        })
+    })
+</script>
 @endsection

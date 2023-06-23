@@ -116,7 +116,7 @@ def getEvent(id = None):
         reconnect()
 
         # ambil data clients
-        sql = f"SELECT * FROM {entity}s"
+        sql = f"SELECT * FROM {entity}s JOIN staffs ON  {entity}s.staff_id = staffs.staff_id"
 
         if(id):
             

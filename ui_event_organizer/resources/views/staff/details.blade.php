@@ -91,11 +91,11 @@
     <div class="modal-body">
         <div class="mb-3">
             <label for="start" class="form-label">Start Time</label>
-            <input id = "start" class="form-control" type="text" placeholder="Default input" aria-label="default input example" require>
+            <input id = "start" class="form-control" type="time" placeholder="Default input" aria-label="default input example" require>
         </div>
         <div class="mb-3">
             <label for="end" class="form-label">End Time</label>
-            <input id = "end" class="form-control" type="text" placeholder="Default input" aria-label="default input example" required>
+            <input id = "end" class="form-control" type="time" placeholder="Default input" aria-label="default input example" required>
         </div>
         <div class="mb-3">
             <label for="pic" class="form-label">Staff PIC</label>

@@ -51,7 +51,7 @@
                                     <input type="password" name="password" id="password" class="form-control" required>
                                 </div>
                                 <div class="row mt-3 justify-content-center">
-                                    <button type="submit" class="btn btn-primary btnSub">Register</button>
+                                    <button type="submit" class="btn btn-primary btnSub" id = "btnSub">Register</button>
                                 </div>
                                 <div class="row mt-3 justify-content-center">
                                     <a href="http://127.0.0.1:8000/" class="btn btn-secondary" id="btnLog">Back to Login</a>
@@ -64,6 +64,40 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+            $("#btnSub").click(function(){
+                name = $("#name").val()
+                phone = $("#phoneNum").val()
+                username = $("#username").val()
+                password = $("#password").val()
+                url = ":5500/staff"
+                datas = {
+                    name:name,
+                    phone_num:phone,
+                    username :username,
+                    password : password,
+                    url : url
+                }
+                if(name != "" && phone != "" && username != "" && password != "") {
+                    $.ajax({
+                        method : "POST",
+                        data : datas,
+                        url : "http://127.0.0.1:8000/api/",
+                        success : function(response) {
+                            alert(response['message']);
+                            console.log(response)
+                        },
+                        error : function(response) {
+                            console.log(response)
+                        }
+                    })
+                } else {
+                    console.log("isi kabeh cok")
+                }
+            })
+        })
+    </script>
 </body>
 
 </html>

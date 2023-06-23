@@ -73,9 +73,9 @@
                 password = $("#password").val()
                 role = $("#role").val()
                 if(role == 2) {
-                    url = ":8001/login/staff"
+                    url = ":5502/login/staff"
                 } else {
-                    url = ":8001/login/client"
+                    url = ":5502/login/client"
                 }
                 datas = {
                     username :username,
@@ -87,15 +87,31 @@
                     $.ajax({
                         method : "POST",
                         data : datas,
-                        url : "http://127.0.0.1:8000/api/login",
+                        async: false,
+                        url : "http://127.0.0.1:8000/api",
                         success : function(response) {
-                            alert(response['message']);
+                            // alert(response['message']);
                             console.log(response)
+
+                            $.ajax({
+                                method : "POST",
+                                async: false,
+                                data : response['data'][0],
+                                url : "http://127.0.0.1:8000/api/session",
+                                success : function(response) {
+                                    console.log(response);
+
+                                    window.location.href = "/";
+                                },
+                                error : function(response) {
+                                    console.log(response)
+                                }
+                            });
                         },
                         error : function(response) {
                             console.log(response)
                         }
-                    })
+                    });
                 }
             })
         })
