@@ -26,4 +26,22 @@
         width: 600px;
     }
 </style>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            method : "GET",
+            data : {
+                url : ":8002/order"
+            },
+            url : "http://127.0.0.1:8000/api/",
+            success : function(response) {
+                // alert(response['data'][0]);
+                console.log(response['data'][0])
+            },
+            error : function(response) {
+                console.log(response)
+            }
+        })
+    })
+</script>
 @endsection

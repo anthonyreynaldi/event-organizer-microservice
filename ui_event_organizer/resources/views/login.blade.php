@@ -73,9 +73,9 @@
                 password = $("#password").val()
                 role = $("#role").val()
                 if(role == 2) {
-                    url = "http://localhost:8001/login/staff"
+                    url = ":8001/login/staff"
                 } else {
-                    url = "http://localhost:8001/login/client"
+                    url = ":8001/login/client"
                 }
                 datas = {
                     username :username,
