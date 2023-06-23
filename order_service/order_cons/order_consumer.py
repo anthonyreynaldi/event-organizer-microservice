@@ -17,7 +17,6 @@ mq_routing = [
     'staff.update',
     'client.new',
     'client.update',
-    'order.new',
     'package.new'
 ]
 

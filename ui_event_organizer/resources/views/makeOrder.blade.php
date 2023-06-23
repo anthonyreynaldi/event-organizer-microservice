@@ -68,7 +68,7 @@
                 note:notes,
                 package_id:paket,
                 client_id:{{session()->get('client_id')}},
-                staff_id: 0,
+                staff_id: '0',
                 url : url
             }
             if(start_date != "" && end_date != "" && paket != "" && notes != "") {

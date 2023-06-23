@@ -200,7 +200,7 @@ def postOrder():
 
         try:
             # simpan client
-            sql = f"INSERT INTO {entity}s ({entity}_id, start_date, end_date, note, package_id, client_id, staff_id, created_at, updated_at) VALUES (NULL, %s, %s, %s, %s, %s, NULL, %s, %s)"
+            sql = f"INSERT INTO {entity}s ({entity}_id, start_date, end_date, note, package_id, client_id, staff_id, created_at, updated_at) VALUES (NULL, %s, %s, %s, %s, %s, 0, %s, %s)"
             dbc.execute(sql, [body['start_date'], body['end_date'], body['note'], body['package_id'], body['client_id'], datetime.now(), datetime.now()] )
             db.commit()
 
