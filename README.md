@@ -14,6 +14,22 @@ Project UAS Service Oriented Architecture / Arsitektur Berorientasi Layanan
 - Event Service - :5503/event
 - Order Service - :5504/order
 
+## Dokumentasi API
+Dokumentasi API untuk setiap service dapat dilihat pada POSTMAN Documentation berikut 
+https://documenter.getpostman.com/view/22507631/2s93z9c3NP
+
+## Docker Compose
+Setiap service dapat dibuat dan dijalankan menggunakan `docker compose up`
+<br>
+Terdapat urutan pengerjaan docker compose agar dapat berjalan dengan baik.
+1. networks
+2. message_broker
+3. client_service
+4. staff_service
+5. login_service
+6. order_service
+7. event_service
+
 ## Diagram
 <img src="./diagram.png" style="display: inline-block; margin: 0 auto; max-width: 40vw">
 
